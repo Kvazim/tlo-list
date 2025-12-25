@@ -33,7 +33,7 @@ function InputFilters({ filters, onChange }: InputFiltersProps) {
         name="address"
         value={address}
         onChange={handleInputChange}
-        placeholder="Поиск по названию"
+        placeholder="Поиск по адресу"
         className="w-full p-2 border border-gray-600 rounded"
       />
     </fieldset>

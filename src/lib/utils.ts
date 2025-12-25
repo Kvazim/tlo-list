@@ -12,8 +12,8 @@ export const getFilteredData = (data: Data, filters: FiltersState): Data => {
 
 export const getSortedData = (data: Data, sortAsc: boolean): Data => {
   if (sortAsc) {
-    return [...data].sort((a, b) => a.name.localeCompare(b.name));
+    return [...data].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
   } else {
-    return data;
+    return [...data].sort((a, b) => b.name.localeCompare(a.name, undefined, { numeric: true }));
   }
 };

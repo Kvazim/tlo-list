@@ -42,7 +42,7 @@ function App() {
   }
 
   return (
-    <div className="grid grid-cols-[2fr_1fr] grid-rows-1 p-10 h-[90vh] gap-10 overflow-hidden">
+    <div className="w-full grid grid-cols-[2fr_1fr] grid-rows-1 p-10 h-[90vh] gap-10 overflow-hidden">
       <Map mapData={filteredData} mapRef={mapRef} />
       <section className="flex flex-col gap-5 p-10 min-h-0">
         <h2 className="text-2xl font-bold">Светофорные объекты</h2>

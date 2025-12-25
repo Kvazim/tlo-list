@@ -13,10 +13,10 @@ type MapProps = {
 function Map({ mapData, mapRef }: MapProps) {
 
   return (
-    <section className="w-full h-full bg-gray-200">
+    <section className="flex flex-1 w-full h-full bg-gray-200">
       <MapContainer
         center={[...MAP_INITIAL_COORDINATES]}
-        zoom={11}
+        zoom={10}
         ref={mapRef}
         className="w-full h-full"
       >
