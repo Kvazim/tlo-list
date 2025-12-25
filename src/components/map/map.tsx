@@ -1,25 +1,14 @@
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import { MapContainer, Marker, TileLayer } from "react-leaflet";
 import 'leaflet/dist/leaflet.css';
-import { LEAFLET_PARAMETRS, MAP_INITIAL_COORDINATES, ON } from "../../const/const";
+import { ICONS, LEAFLET_PARAMETRS, MAP_INITIAL_COORDINATES, ON } from "../../const/const";
 import type { Data } from "../../types/types";
 import L from "leaflet";
+import TloPopup from "../tlo-popup/tlo-popup";
 
 type MapProps = {
   mapData: Data;
   mapRef: React.RefObject<L.Map | null>;
 };
-
-const activeIcon = new L.Icon({
-  iconUrl: '/img/pin-active.svg',
-  iconSize: [28, 40],
-  iconAnchor: [14, 40]
-});
-
-const disabledIcon = new L.Icon({
-  iconUrl: '/img/pin-disabled.svg',
-  iconSize: [28, 40],
-  iconAnchor: [14, 40]
-});
 
 function Map({ mapData, mapRef }: MapProps) {
 
@@ -40,22 +29,9 @@ function Map({ mapData, mapRef }: MapProps) {
           <Marker
             key={item.id}
             position={item.coords}
-            icon={item.mode === ON ? activeIcon : disabledIcon}
+            icon={item.mode === ON ? ICONS.ON : ICONS.OFF}
           >
-            <Popup>
-              <span
-                className="flex justify-start items-center font-bold"
-              >
-                {item.name}
-              </span>
-              <p className="text-gray-700">{item.address}</p>
-              <span className="text-gray-400">
-                Статус:&nbsp;
-                  <span className={item.mode === ON ? 'text-green-600' : 'text-red-600'} >
-                    {item.mode === 'on' ? 'Активный' : 'Неактивный'}
-                  </span>
-              </span>
-            </Popup>
+            <TloPopup item={item} />
           </Marker>
         ))}
       </MapContainer>

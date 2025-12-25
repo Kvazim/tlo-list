@@ -43,7 +43,8 @@ function App() {
   const filteredData = useMemo(() => data.filter(item => {
     return item.name.toLowerCase().includes(filters.name.toLowerCase()) &&
       item.address.toLowerCase().includes(filters.address.toLowerCase()) &&
-      (filters.showOn === ON && item.mode === ON) || (filters.showOff === ON && item.mode !== ON);
+      (filters.showOn === ON && item.mode === ON) || 
+      (filters.showOff === ON && item.mode !== ON);
   }), [data, filters]);
 
   const sortedData = useMemo(() => {

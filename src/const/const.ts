@@ -1,3 +1,5 @@
+import L from "leaflet";
+
 export const ON = 'on';
 export const OFF = 'off';
 
@@ -9,3 +11,8 @@ export const LEAFLET_PARAMETRS = {
 } as const;
 
 export const MAP_INITIAL_COORDINATES = [55.7512, 37.6184] as const;
+
+export const ICONS = {
+  ON: new L.Icon({ iconUrl: '/img/pin-active.svg', iconSize: [28, 40], iconAnchor: [14, 40] }),
+  OFF: new L.Icon({ iconUrl: '/img/pin-disabled.svg', iconSize: [28, 40], iconAnchor: [14, 40] }),
+};
