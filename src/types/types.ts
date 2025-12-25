@@ -16,7 +16,7 @@ export type Data = DataItem[];
 export type FiltersState = {
   name: string;
   address: string;
-  showOn: Mode;
-  showOff: Mode;
+  showOn: boolean;
+  showOff: boolean;
   sortAsc: boolean;
 };

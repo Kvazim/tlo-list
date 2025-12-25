@@ -1,10 +1,11 @@
 import Map from './components/map/map';
 import Filters from './components/filters/filters';
 import ObjectList from './components/object-list/object-list';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useMemo, useRef, useState } from 'react';
 import type { Coordinates, Data, FiltersState } from './types/types';
-import { DATA_URL, ON } from './const/const';
 import L from "leaflet";
+import useGetData from './hoocks/use-get-data';
+import { getFilteredData, getSortedData } from './lib/utils';
 
 function App() {
   const [data, setData] = useState<Data>([]);
@@ -12,48 +13,17 @@ function App() {
   const [filters, setFilters] = useState<FiltersState>({
     name: '',
     address: '',
-    showOn: ON,
-    showOff: ON,
+    showOn: true,
+    showOff: true,
     sortAsc: false,
   });
   const mapRef = useRef<L.Map>(null);
 
-  useEffect(() => {
-    fetch(DATA_URL)
-      .then(
-        (response) => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
+  useGetData(setData, setLoading);
 
-          return response.json()
-        }
-      )
-      .then((jsonData) => {
-        setData(jsonData);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error('Error fetching data:', error);
-        setData([]);
-        setLoading(false);
-      });
-  }, []);
+  const filteredData = useMemo(() => getFilteredData(data, filters), [data, filters]);
 
-  const filteredData = useMemo(() => data.filter(item => {
-    return item.name.toLowerCase().includes(filters.name.toLowerCase()) &&
-      item.address.toLowerCase().includes(filters.address.toLowerCase()) &&
-      (filters.showOn === ON && item.mode === ON) || 
-      (filters.showOff === ON && item.mode !== ON);
-  }), [data, filters]);
-
-  const sortedData = useMemo(() => {
-    if (filters.sortAsc) {
-      return [...filteredData].sort((a, b) => a.name.localeCompare(b.name));
-    } else {
-      return filteredData;
-    }
-  }, [filteredData, filters.sortAsc]);
+  const sortedData = useMemo(() => getSortedData(filteredData, filters.sortAsc), [filteredData, filters.sortAsc]);
 
   const handleFocusOnMarker = (coords: Coordinates) => {
     if (mapRef.current) {
