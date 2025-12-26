@@ -10,7 +10,11 @@ export const getFilteredData = (data: Data, filters: FiltersState): Data => {
   });
 };
 
-export const getSortedData = (data: Data, sortAsc: boolean): Data => {
+export const getSortedData = (data: Data, sortAsc: boolean | null): Data => {
+  if (sortAsc === null) {
+    return data;
+  }
+
   if (sortAsc) {
     return [...data].sort((a, b) => a.name.localeCompare(b.name, undefined, { numeric: true }));
   } else {

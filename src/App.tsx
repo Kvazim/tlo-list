@@ -15,7 +15,7 @@ function App() {
     address: '',
     showOn: true,
     showOff: true,
-    sortAsc: false,
+    sortAsc: null,
   });
   const mapRef = useRef<L.Map>(null);
 
@@ -44,10 +44,12 @@ function App() {
   return (
     <div className="w-full grid grid-cols-[2fr_1fr] grid-rows-1 p-10 h-[90vh] gap-10 overflow-hidden">
       <Map mapData={filteredData} mapRef={mapRef} />
-      <section className="flex flex-col gap-5 p-10 min-h-0">
+      <section className="flex flex-col gap-5 min-h-0">
         <h2 className="text-2xl font-bold">Светофорные объекты</h2>
         <Filters filters={filters} onChange={setFilters} />
-        <ObjectList data={sortedData} onItemClick={handleFocusOnMarker} />
+        <section className="flex flex-1 p-5 border-t border-gray-600 min-h-0 w-full overflow-hidden">
+          <ObjectList data={sortedData} onItemClick={handleFocusOnMarker} />
+        </section>
       </section>
     </div>
   )

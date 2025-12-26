@@ -16,3 +16,5 @@ export const ICONS = {
   ON: new L.Icon({ iconUrl: '/img/pin-active.svg', iconSize: [28, 40], iconAnchor: [14, 40] }),
   OFF: new L.Icon({ iconUrl: '/img/pin-disabled.svg', iconSize: [28, 40], iconAnchor: [14, 40] }),
 };
+
+export const ITEM_HEIGHT = 160;

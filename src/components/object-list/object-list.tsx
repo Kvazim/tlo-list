@@ -1,6 +1,8 @@
 import cn from 'classnames';
 import type { Coordinates, Data } from '../../types/types';
-import { OFF, ON } from '../../const/const';
+import { ITEM_HEIGHT, OFF, ON } from '../../const/const';
+import { useRef } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 type ObjectListProps = {
   data: Data;
@@ -8,39 +10,68 @@ type ObjectListProps = {
 };
 
 function ObjectList({ data, onItemClick }: ObjectListProps) {
+  const parentRef = useRef<HTMLDivElement>(null);
+
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const rowVirtualizer = useVirtualizer({
+    count: data.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => ITEM_HEIGHT,
+    measureElement: (el) => el.getBoundingClientRect().height,
+  })
+
+
+  if (!data || !data.length) {
+    return (
+      <div className="flex items-center justify-center text-gray-400">
+        Объекты не найдены
+      </div>
+    );
+  }
+
   return (
-    <section className="flex flex-1 p-5 border-t border-gray-600 min-h-0 w-full">
-      <ul className=" flex flex-col min-h-0 gap-6 overflow-y-auto">
-        {
-          data && !data.length ?
-            <div className="flex items-center justify-center text-gray-400">
-              Объекты не найдены
-            </div> :
-            data.map(
-              ({ id, name, address, coords, mode }) => (
-                <li key={id} className='cursor-pointer hover:opacity-75' onClick={() => onItemClick?.(coords)}>
-                  <article>
-                    <span
-                      className={
-                        cn(
-                          "flex justify-start items-center pl-5 font-bold relative before:content-[''] before:absolute before:w-4 before:h-4 before:left-0 before:rounded-[50%]",
-                          {
-                            "before:bg-green-500": mode === ON,
-                            "before:bg-gray-400": mode === OFF,
-                          }
-                        )
-                      }
-                    >
-                      {name}
-                    </span>
-                    <p className="text-gray-700">{address}</p>
-                    <span className="text-gray-400">Статус: {mode === 'on' ? 'Активный' : 'Неактивный'}</span>
-                  </article>
-                </li>
-              ))}
+    <div
+      ref={parentRef}
+      className="relative min-h-0 w-full overflow-auto"
+    >
+      <ul className={`relative min-h-0 w-full h-full`} >
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+          const item = data[virtualRow.index];
+
+          return (
+            <li
+              data-index={virtualRow.index}
+              key={item.id}
+              ref={rowVirtualizer.measureElement}
+              className="w-full box-border pb-5 cursor-pointer absolute hover:opacity-75"
+              style={{
+                transform: `translateY(${virtualRow.start}px)`,
+              }}
+              onClick={() => onItemClick?.(item.coords)}
+            >
+              <article>
+                <span
+                  className={cn(
+                    "flex items-center pl-5 font-bold relative before:absolute before:w-4 before:h-4 before:left-0 before:rounded-full",
+                    {
+                      "before:bg-green-500": item.mode === ON,
+                      "before:bg-gray-400": item.mode === OFF,
+                    }
+                  )}
+                >
+                  {item.name}
+                </span>
+                <p className="text-gray-700">{item.address}</p>
+                <span className="text-gray-400">
+                  Статус: {item.mode === ON ? 'Активный' : 'Неактивный'}
+                </span>
+              </article>
+            </li>
+          );
+        })}
       </ul>
-    </section>
-  )
+    </div>
+  );
 }
 
 export default ObjectList;

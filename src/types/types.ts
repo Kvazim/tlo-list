@@ -18,5 +18,5 @@ export type FiltersState = {
   address: string;
   showOn: boolean;
   showOff: boolean;
-  sortAsc: boolean;
+  sortAsc: boolean | null;
 };
