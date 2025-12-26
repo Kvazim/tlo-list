@@ -1,7 +1,7 @@
 import cn from 'classnames';
 import type { Coordinates, Data } from '../../types/types';
 import { ITEM_HEIGHT, OFF, ON } from '../../const/const';
-import { useRef } from 'react';
+import { useCallback, useRef } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
 
 type ObjectListProps = {
@@ -12,12 +12,18 @@ type ObjectListProps = {
 function ObjectList({ data, onItemClick }: ObjectListProps) {
   const parentRef = useRef<HTMLDivElement>(null);
 
+  const getItemKey = useCallback(
+    (index: number) => data[index].id,
+    [data]
+  );
+
   // eslint-disable-next-line react-hooks/incompatible-library
   const rowVirtualizer = useVirtualizer({
     count: data.length,
     getScrollElement: () => parentRef.current,
     estimateSize: () => ITEM_HEIGHT,
     measureElement: (el) => el.getBoundingClientRect().height,
+    getItemKey,
     gap: 10,
   })
 
