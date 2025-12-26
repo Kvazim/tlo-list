@@ -18,6 +18,7 @@ function ObjectList({ data, onItemClick }: ObjectListProps) {
     getScrollElement: () => parentRef.current,
     estimateSize: () => ITEM_HEIGHT,
     measureElement: (el) => el.getBoundingClientRect().height,
+    gap: 10,
   })
 
 
@@ -43,7 +44,7 @@ function ObjectList({ data, onItemClick }: ObjectListProps) {
               data-index={virtualRow.index}
               key={item.id}
               ref={rowVirtualizer.measureElement}
-              className="w-full box-border pb-5 cursor-pointer absolute hover:opacity-75"
+              className="w-full box-border cursor-pointer absolute hover:opacity-75"
               style={{
                 transform: `translateY(${virtualRow.start}px)`,
               }}
