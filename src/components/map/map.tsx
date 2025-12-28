@@ -14,7 +14,7 @@ type MapProps = {
 
 function Map({ mapData, mapRef, isDesktop }: MapProps) {
 
-  useEffect(() => { 
+  useEffect(() => {
     if (!mapRef.current) {
       return;
     }

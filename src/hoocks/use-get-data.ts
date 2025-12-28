@@ -1,32 +1,37 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { DATA_URL } from "../const/const";
 import type { Data } from "../types/types";
 
-function useGetData(
-  dataSetter: React.Dispatch<React.SetStateAction<Data>>,
-  loadingStatusSetter: React.Dispatch<React.SetStateAction<boolean>>
-) {
+function useGetData() {
+  const [data, setData] = useState<Data>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
       fetch(DATA_URL)
         .then(
           (response) => {
+            console.log(response)
             if (!response.ok) {
-              throw new Error('Network response was not ok');
+              throw new Error('Response not ok');
             }
   
             return response.json()
           }
         )
         .then((jsonData) => {
-          dataSetter(jsonData);
-          loadingStatusSetter(false);
+          setData(jsonData);
+          setLoading(false);
         })
         .catch((error) => {
           console.error('Error fetching data:', error);
-          dataSetter([]);
-          loadingStatusSetter(false);
+          setError(error)
+          setData([]);
+          setLoading(false);
         });
-    }, [dataSetter, loadingStatusSetter]);
+    }, []);
+    
+  return { data, loading, error };
 }
 
 export default useGetData;

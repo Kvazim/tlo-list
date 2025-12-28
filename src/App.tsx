@@ -2,15 +2,13 @@ import Map from './components/map/map';
 import Filters from './components/filters/filters';
 import ObjectList from './components/object-list/object-list';
 import { useMemo, useRef, useState } from 'react';
-import type { Coordinates, Data, FiltersState } from './types/types';
+import type { Coordinates, FiltersState } from './types/types';
 import L from "leaflet";
 import useGetData from './hoocks/use-get-data';
 import { getFilteredData, getSortedData } from './lib/utils';
 import { useMatchMedia } from './hoocks/use-match-media';
 
 function App() {
-  const [data, setData] = useState<Data>([]);
-  const [loading, setLoading] = useState<boolean>(true);
   const [filters, setFilters] = useState<FiltersState>({
     name: '',
     address: '',
@@ -21,7 +19,7 @@ function App() {
   const mapContainerRef = useRef<HTMLElement | null>(null);
   const mapRef = useRef<L.Map>(null);
 
-  useGetData(setData, setLoading);
+  const { data, loading } = useGetData();
 
   const isDesktop = useMatchMedia('(min-width: 1024px)');
 
