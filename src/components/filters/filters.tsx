@@ -15,7 +15,7 @@ function Filters({ filters, onChange }: FiltersProps) {
     });
   }
   return (
-    <form className="flex flex-col gap-5">
+    <form className="flex flex-col gap-5 md:col-start-1 lg:col-start-auto">
       <InputFilters filters={filters} onChange={onChange} />
       <CheckboxFilters filters={filters} onChange={onChange} />
       <button

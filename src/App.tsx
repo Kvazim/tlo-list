@@ -6,6 +6,7 @@ import type { Coordinates, Data, FiltersState } from './types/types';
 import L from "leaflet";
 import useGetData from './hoocks/use-get-data';
 import { getFilteredData, getSortedData } from './lib/utils';
+import { useMatchMedia } from './hoocks/use-match-media';
 
 function App() {
   const [data, setData] = useState<Data>([]);
@@ -17,15 +18,27 @@ function App() {
     showOff: true,
     sortAsc: null,
   });
+  const mapContainerRef = useRef<HTMLElement | null>(null);
   const mapRef = useRef<L.Map>(null);
 
   useGetData(setData, setLoading);
+
+  const isDesktop = useMatchMedia('(min-width: 1024px)');
 
   const filteredData = useMemo(() => getFilteredData(data, filters), [data, filters]);
 
   const sortedData = useMemo(() => getSortedData(filteredData, filters.sortAsc), [filteredData, filters.sortAsc]);
 
+
+
   const handleFocusOnMarker = (coords: Coordinates) => {
+    if (!isDesktop && mapContainerRef.current) {
+      mapContainerRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
+    }
+
     if (mapRef.current) {
       mapRef.current.flyTo(
         coords,
@@ -42,12 +55,14 @@ function App() {
   }
 
   return (
-    <div className="w-full grid grid-cols-[2fr_1fr] grid-rows-1 p-10 h-[90vh] gap-10 overflow-hidden">
-      <Map mapData={filteredData} mapRef={mapRef} />
-      <section className="flex flex-col gap-5 min-h-0">
+    <div className="w-full flex flex-col-reverse lg:flex-row lg:h-[90vh] p-10 gap-10 overflow-hidden">
+      <section className="flex w-full h-100 bg-gray-200 lg:h-auto" ref={mapContainerRef}>
+        <Map mapData={filteredData} mapRef={mapRef} isDesktop={isDesktop} />
+      </section>
+      <section className="flex flex-col md:grid md:grid-cols-2 lg:flex lg:flex-col gap-5 min-h-0">
         <h2 className="text-2xl font-bold">Светофорные объекты</h2>
         <Filters filters={filters} onChange={setFilters} />
-        <section className="flex flex-1 p-5 border-t border-gray-600 min-h-0 w-full overflow-hidden">
+        <section className="flex flex-1 p-5 border-t border-gray-600 md:border-transparent md:row-start-1 md:row-end-3 md:col-start-2 lg:border-gray-600 min-h-0 w-full h-full overflow-hidden">
           <ObjectList data={sortedData} onItemClick={handleFocusOnMarker} />
         </section>
       </section>

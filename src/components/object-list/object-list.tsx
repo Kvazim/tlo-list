@@ -39,7 +39,7 @@ function ObjectList({ data, onItemClick }: ObjectListProps) {
   return (
     <div
       ref={parentRef}
-      className="relative min-h-0 w-full overflow-auto"
+      className="relative min-h-0 w-full h-50 md:h-auto overflow-auto"
     >
       <ul className={`relative min-h-0 w-full h-full`} >
         {rowVirtualizer.getVirtualItems().map((virtualRow) => {
