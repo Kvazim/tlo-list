@@ -3,10 +3,12 @@ import type { Data, FiltersState } from "../types/types";
 
 export const getFilteredData = (data: Data, filters: FiltersState): Data => {
   return data.filter((item) => {
-      return item.name.toLowerCase().includes(filters.name.toLowerCase()) &&
-        item.address.toLowerCase().includes(filters.address.toLowerCase()) &&
-        (filters.showOn && item.mode === ON) || 
-        (filters.showOff && item.mode === OFF);
+    return item.name.toLowerCase().includes(filters.name.toLowerCase()) &&
+      item.address.toLowerCase().includes(filters.address.toLowerCase()) &&
+      (
+        (filters.showOn && item.mode === ON) ||
+        (filters.showOff && item.mode === OFF)
+      );
   });
 };
 
